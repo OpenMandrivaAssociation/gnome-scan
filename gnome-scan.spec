@@ -35,7 +35,7 @@ Libraries for using gnome-scan
 
 %package -n %develname
 Summary:	Development files for gnome-scan
-Group:		Development/Libraries
+Group:		Development/GNOME and GTK+
 Requires:	%{libname} = %{version}-%{release}
 Requires:	pkgconfig gtk2-devel
 Provides:	gnomescan-devel
