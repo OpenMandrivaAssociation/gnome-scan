@@ -15,6 +15,7 @@ BuildRequires:	gtk2-devel libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	gettext perl(XML::Parser) pkgconfig
 BuildRequires:	desktop-file-utils gtk-doc gnome-doc-utils
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	gimp
 Provides:	flegita = %{version}-%{release}
 Provides:	gnomescan = %{version}-%{release}
