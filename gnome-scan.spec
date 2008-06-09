@@ -78,13 +78,17 @@ rm -rf %{buildroot}
 touch --no-create %{_datadir}/icons/hicolor
 %{update_menus}
 
+%if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
+%endif
 
 %postun 
 touch --no-create %{_datadir}/icons/hicolor
 %{clean_menus}
 
+%if %mdkversion < 200900
 %postun -n %libname -p /sbin/ldconfig
+%endif
 
 
 %files -f %{name}.lang
