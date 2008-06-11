@@ -20,6 +20,7 @@ BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
 BuildRequires:	desktop-file-utils gtk-doc gnome-doc-utils
 BuildRequires:	libglade2-devel
+BuildRequires:	gnome-common
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	gimp
 Provides:	flegita = %{version}-%{release}
