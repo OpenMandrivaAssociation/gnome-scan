@@ -5,15 +5,19 @@
 Summary:	Gnome solution for scanning in the desktop on top of libsane
 Name:		gnome-scan
 Version:	0.6
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Graphical desktop/GNOME
 License:	LGPLv2+
 URL:		http://www.gnome.org/projects/gnome-scan/index
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
 Patch0:		gnome-scan-cursor_fix.patch
-BuildRequires:	gtk2-devel libgnomeui2-devel sane-devel
+# (fc) 0.6-2mdv fix with non-UTF8 locale
+Patch1:		gnome-scan-0.6-utf8.patch
+# (fc) 0.6-2mdv fix module building
+Patch2:		gnome-scan-0.6-fixmodule.patch
+BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
-BuildRequires:	gettext perl(XML::Parser) pkgconfig
+BuildRequires:	perl(XML::Parser) 
 BuildRequires:	desktop-file-utils gtk-doc gnome-doc-utils
 BuildRequires:	libglade2-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -46,18 +50,20 @@ Contains development headers and libraries for gnome-scan
 %prep
 %setup -q
 %patch0 -p0 -b .fix
+%patch1 -p1 -b .utf8
+%patch2 -p1 -b .fixmodule
+
+#needed by patch2
+autoreconf
 
 %build
-%configure --disable-static
-# Disable rpath
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+%configure2_5x --disable-static
 
-make %{?_smp_mflags} 
+%make
 
 %install
 rm -rf %{buildroot}
-make DESTDIR=%{buildroot} install
+%makeinstall_std
 
 desktop-file-install					\
 	--remove-category Application			\
