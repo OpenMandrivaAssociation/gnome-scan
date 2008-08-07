@@ -5,7 +5,7 @@
 Summary:	Gnome solution for scanning in the desktop on top of libsane
 Name:		gnome-scan
 Version:	0.6
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Graphical desktop/GNOME
 License:	LGPLv2+
 URL:		http://www.gnome.org/projects/gnome-scan/index
