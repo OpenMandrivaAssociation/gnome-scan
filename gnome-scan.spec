@@ -4,17 +4,14 @@
 
 Summary:	Gnome solution for scanning in the desktop on top of libsane
 Name:		gnome-scan
-Version:	0.6
-Release:	%mkrel 3
+Version:	0.7.1
+Release:	%mkrel 1
 Group:		Graphical desktop/GNOME
 License:	LGPLv2+
 URL:		http://www.gnome.org/projects/gnome-scan/index
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
-Patch0:		gnome-scan-cursor_fix.patch
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.7/%{name}-%{version}.tar.bz2
 # (fc) 0.6-2mdv fix with non-UTF8 locale
-Patch1:		gnome-scan-0.6-utf8.patch
-# (fc) 0.6-2mdv fix module building
-Patch2:		gnome-scan-0.6-fixmodule.patch
+Patch1:		gnome-scan-0.7.1-utf8.patch
 BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
@@ -51,12 +48,7 @@ Contains development headers and libraries for gnome-scan
 
 %prep
 %setup -q
-%patch0 -p0 -b .fix
 %patch1 -p1 -b .utf8
-%patch2 -p1 -b .fixmodule
-
-#needed by patch2
-autoreconf
 
 %build
 %configure2_5x --disable-static
@@ -107,20 +99,20 @@ touch --no-create %{_datadir}/icons/hicolor
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %{_bindir}/flegita
-%{_libdir}/gimp/2.0/plug-ins/flegita-gimp
+#%{_libdir}/gimp/2.0/plug-ins/flegita-gimp
 %{_datadir}/applications/flegita.desktop
 %{_datadir}/icons/hicolor/*/*/*.svg
 %{_datadir}/gnome-scan/
 
 %files -n %libname
 %defattr(-,root,root,-)
-%{_libdir}/libgnomescan.so.%{major}
-%{_libdir}/libgnomescan.so.%{major}.*
+%{_libdir}/libgnome-scan.so.%{major}
+%{_libdir}/libgnome-scan.so.%{major}.*
 %{_libdir}/gnome-scan-1.0/
 
 %files -n %develname
 %defattr(-,root,root,-)
-%{_includedir}/gnome-scan-1.0/
-%{_libdir}/libgnomescan.so
+%{_includedir}/*
+%{_libdir}/libgnome-scan.so
 %{_libdir}/pkgconfig/gnome-scan.pc
 %doc %{_datadir}/gtk-doc/html/gnome-scan*/
