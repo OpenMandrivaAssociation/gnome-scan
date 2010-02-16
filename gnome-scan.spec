@@ -12,6 +12,8 @@ URL:		http://www.gnome.org/projects/gnome-scan/index
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.7/%{name}-%{version}.tar.bz2
 # (fc) 0.6-2mdv fix with non-UTF8 locale
 Patch1:		gnome-scan-0.7.1-utf8.patch
+# (fc) 0.7.1-2mdv fix build with babl 0.1
+Patch2:		gnome-scan-0.7.1-babl01.patch
 BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
@@ -49,6 +51,7 @@ Contains development headers and libraries for gnome-scan
 %prep
 %setup -q
 %patch1 -p1 -b .utf8
+%patch2 -p1 -b .babl01
 
 %build
 %configure2_5x --disable-static
