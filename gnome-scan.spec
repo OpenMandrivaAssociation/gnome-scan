@@ -14,6 +14,7 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.7/%{name}-%{version}.t
 Patch1:		gnome-scan-0.7.1-utf8.patch
 # (fc) 0.7.1-2mdv fix build with babl 0.1
 Patch2:		gnome-scan-0.7.1-babl01.patch
+Patch3:		gnome-scan-0.7.1-fix-link.patch
 BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
@@ -52,6 +53,7 @@ Contains development headers and libraries for gnome-scan
 %setup -q
 %patch1 -p1 -b .utf8
 %patch2 -p1 -b .babl01
+%patch3 -p0 -b .link
 
 %build
 %configure2_5x --disable-static
