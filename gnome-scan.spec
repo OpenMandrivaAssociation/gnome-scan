@@ -4,8 +4,8 @@
 
 Summary:	Gnome solution for scanning in the desktop on top of libsane
 Name:		gnome-scan
-Version:	0.7.1
-Release:	%mkrel 2
+Version:	0.7.2
+Release:	%mkrel 1
 Group:		Graphical desktop/GNOME
 License:	LGPLv2+
 URL:		http://www.gnome.org/projects/gnome-scan/index
@@ -14,7 +14,8 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.7/%{name}-%{version}.t
 Patch1:		gnome-scan-0.7.1-utf8.patch
 # (fc) 0.7.1-2mdv fix build with babl 0.1
 Patch2:		gnome-scan-0.7.1-babl01.patch
-Patch3:		gnome-scan-0.7.1-fix-link.patch
+Patch3:		gnome-scan-0.7.2-fix-link.patch
+Patch4:		gnome-scan-0.7.2-fix-str-fmt.patch
 BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
@@ -54,8 +55,10 @@ Contains development headers and libraries for gnome-scan
 %patch1 -p1 -b .utf8
 %patch2 -p1 -b .babl01
 %patch3 -p0 -b .link
+%patch4 -p0 -b .str-fmt
 
 %build
+autoreconf -fiv
 %configure2_5x --disable-static
 
 %make
@@ -111,8 +114,7 @@ touch --no-create %{_datadir}/icons/hicolor
 
 %files -n %libname
 %defattr(-,root,root,-)
-%{_libdir}/libgnome-scan.so.%{major}
-%{_libdir}/libgnome-scan.so.%{major}.*
+%{_libdir}/libgnome-scan.so.%{major}*
 %{_libdir}/gnome-scan-1.0/
 
 %files -n %develname
