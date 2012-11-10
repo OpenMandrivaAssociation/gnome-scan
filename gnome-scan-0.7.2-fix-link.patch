@@ -1,0 +1,19 @@
+--- modules/gsfile/Makefile.am.link	2010-02-17 13:41:37.000000000 +0100
++++ modules/gsfile/Makefile.am	2010-02-17 13:42:03.000000000 +0100
+@@ -24,3 +24,4 @@
+ 	$(NULL)
+ 
+ libgsfiles_la_LDFLAGS = -avoid-version -module
++libgsfiles_la_LIBADD = $(GNOME_SCAN_LIBS) $(top_builddir)/lib/libgnome-scan.la
+--- modules/gsfile/Makefile.in.link	2010-02-20 15:21:08.000000000 +0100
++++ modules/gsfile/Makefile.in	2010-03-02 20:23:42.000000000 +0100
+@@ -73,7 +73,7 @@
+   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+ am__installdirs = "$(DESTDIR)$(modulesdir)"
+ LTLIBRARIES = $(modules_LTLIBRARIES)
+-libgsfiles_la_LIBADD =
++libgsfiles_la_LIBADD = $(GNOME_SCAN_LIBS) $(top_builddir)/lib/libgnome-scan.la
+ am_libgsfiles_la_OBJECTS = gsfile-scanner.lo gsfile-module.lo \
+ 	gsfile-backend.lo gsfile-options.lo gsfile-filenames-widget.lo
+ libgsfiles_la_OBJECTS = $(am_libgsfiles_la_OBJECTS)
+

@@ -1,0 +1,103 @@
+From 25452ff2bcdd76e16550bb97ee114ac3d83cfc3f Mon Sep 17 00:00:00 2001
+From: Frederic Crozat <fcrozat@mandriva.com>
+Date: Tue, 16 Feb 2010 18:06:47 +0100
+Subject: [PATCH] fix build with babl 0.1
+
+---
+ modules/gsane/gsane-processor.c |    6 +++---
+ src/flegita-gimp-sink.c         |   17 ++++++++---------
+ 2 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/modules/gsane/gsane-processor.c b/modules/gsane/gsane-processor.c
+index 0934349..d99d0b1 100644
+--- a/modules/gsane/gsane-processor.c
++++ b/modules/gsane/gsane-processor.c
+@@ -112,7 +112,7 @@ gsane_processor_process_nbit(GSaneProcessor *self, guchar *buf, guint buf_len)
+ 				   operation */
+ 	guint src_pos;
+ 	guint offset;
+-	guchar *src, *dest, *buf8 = g_new0(guchar, self->priv->pixels_in_buf * self->priv->format->format.bytes_per_pixel);
++	guchar *src, *dest, *buf8 = g_new0(guchar, self->priv->pixels_in_buf * babl_format_get_bytes_per_pixel(self->priv->format));
+ 	guint samples_in_buf = self->priv->pixels_in_buf * self->priv->sample_count;
+ 	for (i = 0 ; i < samples_in_buf ; i++) {
+ 		/* compute the address of the first byte container sample value */
+@@ -174,7 +174,7 @@ gsane_processor_process_three_pass_8bit(GSaneProcessor *self, guchar *buf, guint
+ 		/* pos of pixel i in buf */
+ 		src_pos = i * self->priv->bytes_per_pixel;
+ 		/* pos of pixel i in buf3 */
+-		dest_pos = i * self->priv->format->format.bytes_per_pixel + self->priv->sample_offset;
++		dest_pos = i * babl_format_get_bytes_per_pixel(self->priv->format) + self->priv->sample_offset;
+ 		/* save */
+ 		memcpy(buf3+dest_pos, buf+src_pos, self->priv->bytes_per_pixel);
+ 	}
+@@ -362,7 +362,7 @@ gsane_processor_prepare_image(GSaneProcessor *self, SANE_Parameters* params, gui
+ 	self->priv->format = gsane_processor_get_babl_format(self);
+ 	g_return_val_if_fail(self->priv->format, NULL);
+ 
+-	self->priv->sample_stride	= self->priv->format->format.bytes_per_pixel / MAX(self->priv->sample_count, self->priv->frame_count);
++	self->priv->sample_stride	= babl_format_get_bytes_per_pixel(self->priv->format) / MAX(self->priv->sample_count, self->priv->frame_count);
+ 	self->priv->max_target_sample_value= (0xFFFFFFFF) >> (32 - self->priv->sample_stride * 8);
+ 
+ 	self->priv->buffer = gegl_buffer_new(&extent, self->priv->format);
+diff --git a/src/flegita-gimp-sink.c b/src/flegita-gimp-sink.c
+index 07da458..0bf3ea6 100644
+--- a/src/flegita-gimp-sink.c
++++ b/src/flegita-gimp-sink.c
+@@ -45,7 +45,7 @@ struct _FlegitaGimpSinkPrivate
+ 	GimpDrawable	*drawable;
+ 	const GeglRectangle	*extent;
+ 	GeglRectangle	actual_extent;
+-	BablFormat		*format;
++	Babl            *format;
+ 	GimpPixelRgn	rgn;
+ 	gpointer		iter;
+ 	GeglBuffer		*buffer;
+@@ -162,7 +162,7 @@ fgs_start_frame (GnomeScanPlugin *plugin)
+ 	FlegitaGimpSink *sink = FLEGITA_GIMP_SINK (plugin);
+ 	FlegitaGimpSinkPrivate *priv = GET_PRIVATE (sink);
+ 	GimpPixelRgn	rgn;
+-	BablFormat *format = NULL;
++	Babl *format = NULL;
+ 	gchar*format_name = NULL;
+ 	gint i;
+ 
+@@ -181,7 +181,7 @@ fgs_start_frame (GnomeScanPlugin *plugin)
+ 	g_object_get (priv->buffer, "format", &format, NULL);
+ 
+ 	guint image_type = 0;
+-	switch (format->components) {
++	switch (babl_format_get_n_components(format)) {
+ 	case 1:
+ 		image_type = GIMP_GRAY_IMAGE;
+ 		format_name = "Y";
+@@ -194,14 +194,13 @@ fgs_start_frame (GnomeScanPlugin *plugin)
+ 	}
+ 
+ 	gint bps = format->type[0]->bits;
+-	for (i = 0; i < format->components; i++) {
+-		g_debug (G_STRLOC ": component %i:%s use %i bits",i,
+-				 format->type[i]->instance.name,
+-				 format->type[i]->bits);
++	for (i = 0; i < babl_format_get_n_components(format); i++) {
++        g_debug (G_STRLOC ": component %i:%s",i,
++                 babl_get_name(babl_format_get_type(format, i)));
+ 	}
+ 	format_name = g_strdup_printf ("%s u%i", format_name, bps > 8 ? 16 : bps);
+ 
+-	priv->format = (BablFormat*) babl_format (format_name);
++	priv->format = (Babl*) babl_format (format_name);
+ 	gdouble opacity = 100.;
+ 
+ 	priv->layer = gimp_layer_new (sink->image_ID,
+@@ -234,7 +233,7 @@ fgs_work (GnomeScanPlugin *plugin, gdouble *progress)
+ 	FlegitaGimpSinkPrivate *priv = GET_PRIVATE (plugin);
+ 	GimpPixelRgn *rgn = &priv->rgn;
+ 
+-	gint chunk_size = rgn->w * rgn->h * priv->format->bytes_per_pixel;
++	gint chunk_size = rgn->w * rgn->h * babl_format_get_bytes_per_pixel(priv->format);
+ 	GeglRectangle rect = {
+ 		.x		= rgn->x + priv->extent->x,
+ 		.y		= rgn->y + priv->extent->y,
+-- 
+1.6.6.2
+

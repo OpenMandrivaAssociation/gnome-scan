@@ -1,0 +1,11 @@
+--- lib/gnome-scan-module-manager.c.orig	2010-02-20 15:13:02.000000000 +0100
++++ lib/gnome-scan-module-manager.c	2010-03-02 20:32:31.000000000 +0100
+@@ -387,7 +387,7 @@
+ 						_inner_error_ = NULL;
+ 						{
+ 							if (g_error_matches (e, MODULE_ERROR, MODULE_ERROR_FAIL)) {
+-								g_warning (e->message);
++								g_warning ("%s", e->message);
+ 							}
+ 							_g_error_free0 (e);
+ 						}
