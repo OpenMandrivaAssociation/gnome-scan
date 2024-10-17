@@ -8,7 +8,7 @@ Version:	0.7.2
 Release:	%mkrel 2
 Group:		Graphical desktop/GNOME
 License:	LGPLv2+
-URL:		http://www.gnome.org/projects/gnome-scan/index
+URL:		https://www.gnome.org/projects/gnome-scan/index
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.7/%{name}-%{version}.tar.bz2
 # (fc) 0.6-2mdv fix with non-UTF8 locale
 Patch1:		gnome-scan-0.7.1-utf8.patch
