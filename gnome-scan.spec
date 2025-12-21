@@ -16,6 +16,11 @@ Patch1:		gnome-scan-0.7.1-utf8.patch
 Patch2:		gnome-scan-0.7.1-babl01.patch
 Patch3:		gnome-scan-0.7.2-fix-link.patch
 Patch4:		gnome-scan-0.7.2-fix-str-fmt.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	libgnomeui2-devel sane-devel
 BuildRequires:	gegl-devel gimp-devel
 BuildRequires:	perl(XML::Parser) 
